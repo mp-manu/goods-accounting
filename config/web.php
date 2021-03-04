@@ -4,12 +4,14 @@ $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
 $config = [
-    'id' => 'basic',
+    'id' => 'goods-accounting',
     'basePath' => dirname(__DIR__),
+    'name' => 'Тест',
     'bootstrap' => ['log'],
+    'language' => 'ru',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm' => '@vendor/npm-asset',
     ],
     'components' => [
         'request' => [
@@ -43,6 +45,7 @@ $config = [
                 ],
             ],
         ],
+
         'db' => $db,
         'urlManager' => [
             'enablePrettyUrl' => true,
@@ -50,7 +53,31 @@ $config = [
             'rules' => [
             ],
         ],
+
     ],
+    'modules' => [
+        'gridview' => [
+            'class' => '\kartik\grid\Module'
+        ]
+    ],
+    'as beforeRequest' => [  //if guest user access site so, redirect to login page.
+
+
+        'class' => 'yii\filters\AccessControl',
+        'rules' => [
+            [
+                'actions' => ['logout', 'index', 'store', 'product', 'get-products', 'create', 'update', 'delete', 'view'],
+                'roles' => ['@'],
+                'allow' => true,
+            ],
+            [
+                'actions' => ['login', 'get-products'],
+                'allow' => true,
+                'roles' => ['?'],
+            ],
+        ],
+    ],
+
     'params' => $params,
 ];
 
